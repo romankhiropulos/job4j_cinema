@@ -1,5 +1,8 @@
-DROP TABLE IF EXISTS account;
 DROP TABLE IF EXISTS ticket;
+DROP TABLE IF EXISTS account;
+DROP SEQUENCE IF EXISTS global_seq;
+
+CREATE SEQUENCE global_seq START WITH 1000;
 
 CREATE TABLE account
 (
@@ -11,7 +14,7 @@ CREATE TABLE account
 
 CREATE TABLE ticket
 (
-    id         SERIAL PRIMARY KEY,
+    id         SERIAL PRIMARY KEY DEFAULT nextval('global_seq'),
     session_id INT NOT NULL,
     row        INT NOT NULL,
     cell       INT NOT NULL,

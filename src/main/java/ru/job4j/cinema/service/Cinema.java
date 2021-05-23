@@ -6,6 +6,9 @@ import ru.job4j.cinema.model.Account;
 import ru.job4j.cinema.persistence.PsqlStorage;
 import ru.job4j.cinema.persistence.Storage;
 
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
+
 public class Cinema {
 
     private final Storage storage = PsqlStorage.getInstance();
@@ -23,16 +26,21 @@ public class Cinema {
         return Cinema.Lazy.INST;
     }
 
-    public boolean saveAccount(Account account) {
-
-        boolean result = true;
+    public Exception saveAccount(final Account account) {
+        Exception answer = null;
         try {
-            storage.save(account);
-        } catch (Exception exception) {
-            result = false;
-            LOG.error("Exception: " + exception.getMessage(), exception);
+            Account retAccount = storage.getAccount(account.getUsername(), account.getEmail(), account.getPhone());
+            account.setId(System.currentTimeMillis());
+            account.getTickets().forEach(t -> t.setAccount(account));
+            retAccount = (retAccount == null) ? storage.saveAccount(account) : storage.updateAccount(account);
+        } catch (SQLIntegrityConstraintViolationException exception) {
+            answer = exception;
+            LOG.error("Constraint violation exception: " + exception.getMessage(), exception);
+        } catch (SQLException exception) {
+            answer = exception;
+            LOG.error("SQL Exception: " + exception.getMessage(), exception);
         }
 
-        return result;
+        return answer;
     }
 }

@@ -9,6 +9,27 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <title>Hello, world!</title>
+
+    <script>
+        function validate() {
+            let valid = true;
+            let name = document.getElementById('username').value;
+            let email = document.getElementById('email').value;
+            let phone = document.getElementById('phone').value;
+            if (name === '') {
+                valid = false;
+                alert("Пожалуйста заполните поле \"Имя\"");
+            } else if (email === '') {
+                valid = false;
+                alert("Пожалуйста заполните поле \"Почта\"");
+            } else if (phone === '') {
+                valid = false;
+                alert("Пожалуйста заполните поле \"Номер\"");
+            }
+
+            return valid;
+        }
+    </script>
 </head>
 <body>
 <!-- Optional JavaScript -->
@@ -37,7 +58,7 @@
                 <label for="email">Почта</label>
                 <input type="text" class="form-control" id="email" placeholder="Почта">
             </div>
-            <button type="button" class="btn btn-success">Оплатить</button>
+            <button type="button" class="btn btn-success" onclick="return validate()">Оплатить</button>
         </form>
     </div>
 </div>

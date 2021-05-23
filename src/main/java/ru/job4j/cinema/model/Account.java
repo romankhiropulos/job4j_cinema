@@ -1,21 +1,15 @@
 package ru.job4j.cinema.model;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class Account {
 
-    private int id;
+    private long id;
     private String username;
     private String email;
     private String phone;
     private List<Ticket> tickets;
-
-    public Account(String username, String email) {
-        this.username = username;
-        this.email = email;
-    }
 
     public Account(String username, String email, String phone) {
         this.username = username;
@@ -23,8 +17,20 @@ public class Account {
         this.phone = phone;
     }
 
+    public Account(long id, String username, String email, String phone) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.phone = phone;
+    }
+
     public Account(String username, String email, String phone, List<Ticket> tickets) {
         this(username, email, phone);
+        this.tickets = tickets;
+    }
+
+    public Account(long id, String username, String email, String phone, List<Ticket> tickets) {
+        this(id, username, email, phone);
         this.tickets = tickets;
     }
 
@@ -52,11 +58,11 @@ public class Account {
         this.phone = phone;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -85,10 +91,10 @@ public class Account {
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result = (int) (id ^ (id >>> 32));
         result = 31 * result + username.hashCode();
         result = 31 * result + email.hashCode();
-        result = 31 * result + (phone != null ? phone.hashCode() : 0);
+        result = 31 * result + phone.hashCode();
         return result;
     }
 }
