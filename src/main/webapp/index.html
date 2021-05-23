@@ -28,21 +28,25 @@
                 url: 'http://localhost:8080//job4j_cinema/hall',
                 dataType: "json",
                 success: function (respData) {
+                    console.log("Вошли в функцию саксеса");
+                    console.log(respData);
                     let tickets = "";
-                    let countCell = 1;
-                    for (let i = 1; i <= respData.length; i++) {
-                        if (countCell === 1) {
+                    let countCell = 0;
+                    for (let i = 0; i < respData.length; i++) {
+                        if (countCell === 0) {
                             tickets += " <tr>\n"
                                         + "<th>" + respData[i]['row'] + "</th>";
+
                         }
-                        tickets += `<td><input type="checkbox" name="place" value="11">Ряд ${respData[i]['row']}, Место ${respData[i]['cell']}</td>\n`;
-                        if (countCell === 3) {
+                        tickets += `<td><input type="checkbox" name="place" value="11"> Ряд ${respData[i]['row']}, Место ${respData[i]['cell']}</td>\n`;
+                        if (countCell === 2) {
                             tickets += "</tr>\n";
-                            countCell = 1;
+                            countCell = 0;
                         } else {
                             countCell++;
                         }
                     }
+                    console.log(tickets);
                     $('#tbody').html(tickets);
                 },
                 error: function (err) {

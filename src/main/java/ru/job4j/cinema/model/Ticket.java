@@ -96,4 +96,14 @@ public class Ticket {
         result = 31 * result + accountId;
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Ticket{"
+                + "sessionId=" + sessionId
+                + ", row=" + row
+                + ", cell=" + cell
+                + ", accountId=" + accountId
+                + '}';
+    }
 }
