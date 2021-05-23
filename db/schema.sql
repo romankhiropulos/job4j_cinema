@@ -14,7 +14,7 @@ CREATE TABLE account
 
 CREATE TABLE ticket
 (
-    id         SERIAL PRIMARY KEY DEFAULT nextval('global_seq'),
+    id         INTEGER PRIMARY KEY DEFAULT nextval('global_seq'),
     session_id INT NOT NULL,
     row        INT NOT NULL,
     cell       INT NOT NULL,

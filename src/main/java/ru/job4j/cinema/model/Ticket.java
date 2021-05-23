@@ -1,23 +1,24 @@
 package ru.job4j.cinema.model;
 
-import java.util.Objects;
-
 public class Ticket {
     private int id;
-    private int session_id;
+    private int sessionId;
     private int row;
     private int cell;
-    private Account account;
+    private int accountId;
 
-    public Ticket(int session_id, int row, int cell) {
-        this.session_id = session_id;
+    public Ticket(int sessionId, int row, int cell) {
+        this.sessionId = sessionId;
         this.row = row;
         this.cell = cell;
     }
 
-    public Ticket(int session_id, int row, int cell, Account account) {
-        this(session_id, row, cell);
-        this.account = account;
+    public Ticket(int id, int sessionId, int row, int cell, int accountId) {
+        this.id = id;
+        this.sessionId = sessionId;
+        this.row = row;
+        this.cell = cell;
+        this.accountId = accountId;
     }
 
     public int getId() {
@@ -28,12 +29,12 @@ public class Ticket {
         this.id = id;
     }
 
-    public int getSession_id() {
-        return session_id;
+    public int getSessionId() {
+        return sessionId;
     }
 
-    public void setSession_id(int session_id) {
-        this.session_id = session_id;
+    public void setSessionId(int sessionId) {
+        this.sessionId = sessionId;
     }
 
     public int getRow() {
@@ -52,12 +53,12 @@ public class Ticket {
         this.cell = cell;
     }
 
-    public Account getAccount() {
-        return account;
+    public int getAccountId() {
+        return accountId;
     }
 
-    public void setAccount(Account account) {
-        this.account = account;
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
     }
 
     @Override
@@ -74,7 +75,7 @@ public class Ticket {
         if (id != ticket.id) {
             return false;
         }
-        if (session_id != ticket.session_id) {
+        if (sessionId != ticket.sessionId) {
             return false;
         }
         if (row != ticket.row) {
@@ -83,16 +84,16 @@ public class Ticket {
         if (cell != ticket.cell) {
             return false;
         }
-        return Objects.equals(account, ticket.account);
+        return accountId == ticket.accountId;
     }
 
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + session_id;
+        result = 31 * result + sessionId;
         result = 31 * result + row;
         result = 31 * result + cell;
-        result = 31 * result + (account != null ? account.hashCode() : 0);
+        result = 31 * result + accountId;
         return result;
     }
 }

@@ -3,11 +3,14 @@ package ru.job4j.cinema.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.job4j.cinema.model.Account;
+import ru.job4j.cinema.model.Ticket;
 import ru.job4j.cinema.persistence.PsqlStorage;
 import ru.job4j.cinema.persistence.Storage;
 
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.Collection;
+import java.util.List;
 
 public class Cinema {
 
@@ -31,7 +34,7 @@ public class Cinema {
         try {
             Account retAccount = storage.getAccount(account.getUsername(), account.getEmail(), account.getPhone());
             account.setId(System.currentTimeMillis());
-            account.getTickets().forEach(t -> t.setAccount(account));
+            account.getTickets().forEach(t -> t.setAccountId((int) account.getId()));
             retAccount = (retAccount == null) ? storage.saveAccount(account) : storage.updateAccount(account);
         } catch (SQLIntegrityConstraintViolationException exception) {
             answer = exception;
@@ -43,4 +46,16 @@ public class Cinema {
 
         return answer;
     }
+
+    public Collection<Ticket> getTickets() {
+        Collection<Ticket> tickets = null;
+        try {
+            tickets = storage.getAllTickets();
+        } catch (SQLException exception) {
+            LOG.error("SQL Exception: " + exception.getMessage(), exception);
+        }
+
+        return tickets;
+    }
+
 }

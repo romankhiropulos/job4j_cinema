@@ -9,6 +9,9 @@ import ru.job4j.cinema.model.Ticket;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Properties;
 
 public class PsqlStorage implements Storage {
@@ -89,7 +92,7 @@ public class PsqlStorage implements Storage {
                 ps.setInt(1, 1);
                 ps.setInt(2, ticket.getRow());
                 ps.setInt(3, ticket.getCell());
-                ps.setLong(4, ticket.getAccount().getId());
+                ps.setLong(4, ticket.getAccountId());
                 ps.addBatch();
             }
             ps.executeBatch();
@@ -122,4 +125,26 @@ public class PsqlStorage implements Storage {
         return account;
     }
 
+    @Override
+    public Collection<Ticket> getAllTickets() throws SQLException {
+        List<Ticket> tickets = new ArrayList<>();
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("SELECT * FROM ticket")
+        ) {
+            try (ResultSet it = ps.executeQuery()) {
+                while (it.next()) {
+                    tickets.add(
+                            new Ticket(it.getInt("id"),
+                                    it.getInt("session_id"),
+                                    it.getInt("row"),
+                                    it.getInt("cell"),
+                                    it.getInt("account_id")
+                            )
+                    );
+                }
+            }
+        }
+
+        return tickets;
+    }
 }
