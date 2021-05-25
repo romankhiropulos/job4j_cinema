@@ -28,17 +28,20 @@
                 url: 'http://localhost:8080//job4j_cinema/hall',
                 dataType: "json",
                 success: function (respData) {
-                    console.log("Вошли в функцию саксеса");
-                    console.log(respData);
+                    // console.log("Вошли в функцию саксеса");
+                    // console.log(respData);
                     let tickets = "";
                     let countCell = 0;
+                    let curSession = respData[0]['session_id'];
                     for (let i = 0; i < respData.length; i++) {
+                        let curRow = respData[i]['row'];
+                        let curCell = respData[i]['cell'];
+                        let curValue = curRow + "_" + curCell;
                         if (countCell === 0) {
                             tickets += " <tr>\n"
-                                        + "<th>" + respData[i]['row'] + "</th>";
-
+                                        + "<th>" + curRow + "</th>";
                         }
-                        tickets += `<td><input type="checkbox" name="place" value="11"> Ряд ${respData[i]['row']}, Место ${respData[i]['cell']}</td>\n`;
+                        tickets += `<td><input type="checkbox" name="place" value=${curValue}> Ряд ${curRow}, Место ${curCell}</td>\n`;
                         if (countCell === 2) {
                             tickets += "</tr>\n";
                             countCell = 0;
@@ -46,8 +49,8 @@
                             countCell++;
                         }
                     }
-                    console.log(tickets);
-                    $('#tbody').html(tickets);
+                     // console.log(tickets);
+                    $('#tbodyId').html(tickets);
                 },
                 error: function (err) {
                     alert(err);
@@ -55,7 +58,35 @@
             })
         })
     </script>
+    <script>
+        function byTickets() {
 
+            let result = true;
+            let checked = [];
+            $('input:checkbox:checked').each(function() {
+                checked.push($(this).val());
+            });
+            if (checked.length === 0) {
+                result = false;
+                alert("Нужно выбрать места для оформления заказа!")
+            } else {
+                var chosenTickets = [];
+                for (let i = 0; i < checked.length; i++) {
+                    chosenTickets.push(checked[i].split("_"));
+                }
+                // 5. После того как пользователь выбрал место,
+                //     нужно перейти на страницу payment.html.
+                //     Сделать это можно через JS - window.local.href.
+                //
+                //     На странице нужно указать место и сумму денег.
+                console.log(chosenTickets);
+                localStorage.setItem('chosenTickets', chosenTickets);
+                console.log(localStorage.getItem('chosenTickets'));
+            }
+
+            return result;
+        }
+    </script>
 </head>
 
 <body>
@@ -73,7 +104,7 @@
                     <th>3</th>
                 </tr>
                 </thead>
-                <tbody id="tbody">
+                <tbody id="tbodyId">
     <!--                <tr>-->
     <!--                    <th>1</th>-->
     <!--                    <td><input type="radio" name="place" value="11"> Ряд 1, Место 1</td>-->
@@ -96,7 +127,7 @@
             </table>
         </div>
         <div class="row float-right">
-            <button type="button" class="btn btn-success" onclick="return validate()">Оплатить</button>
+            <button type="button" class="btn btn-success" onclick="return byTickets()">Оплатить</button>
         </div>
     </div>
 </body>

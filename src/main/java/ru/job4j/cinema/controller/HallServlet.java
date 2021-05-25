@@ -31,17 +31,14 @@ public class HallServlet extends HttpServlet {
         resp.setContentType("application/json");
         resp.setHeader("cache-control", "no-cache");
 
+        GsonBuilder builder = new GsonBuilder();
+        builder.setPrettyPrinting();
+        Gson gson = builder.create();
+
         List<Ticket> tickets = (List<Ticket>) cinema.getTickets();
-        if (tickets != null) {
-            GsonBuilder builder = new GsonBuilder();
-            builder.setPrettyPrinting();
-
-            Gson gson = builder.create();
-            String jsonResponse = gson.toJson(tickets);
-
-            PrintWriter writer = resp.getWriter();
-            writer.write(jsonResponse);
-            writer.flush();
-        }
+        String jsonResponse = gson.toJson(tickets);
+        PrintWriter writer = resp.getWriter();
+        writer.write(jsonResponse);
+        writer.flush();
     }
 }
