@@ -70,18 +70,20 @@
                 result = false;
                 alert("Нужно выбрать места для оформления заказа!")
             } else {
-                var chosenTickets = [];
-                for (let i = 0; i < checked.length; i++) {
-                    chosenTickets.push(checked[i].split("_"));
-                }
+                console.log(checked);
+                // var chosenTickets = [];
+                // for (let i = 0; i < checked.length; i++) {
+                //     chosenTickets.push(checked[i].split("_"));
+                // }
                 // 5. После того как пользователь выбрал место,
                 //     нужно перейти на страницу payment.html.
                 //     Сделать это можно через JS - window.local.href.
                 //
                 //     На странице нужно указать место и сумму денег.
-                console.log(chosenTickets);
-                localStorage.setItem('chosenTickets', chosenTickets);
+                // console.log(chosenTickets);
+                localStorage.setItem('chosenTickets', checked);
                 console.log(localStorage.getItem('chosenTickets'));
+                window.location.href = "http://localhost:8080//job4j_cinema/payment.html";
             }
 
             return result;

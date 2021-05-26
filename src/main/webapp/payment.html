@@ -6,15 +6,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
 
     <title>Hello, world!</title>
+
+    <script>
+        $(document).ready(function () {
+            let strTickets = localStorage.getItem('chosenTickets');
+            let arrStringPair = strTickets.split(",");
+            let chosenTickets = [];
+            let choice = `<h5>Вы выбрали:</h5>`;
+            let sum = 0;
+            for (let i = 0; i < arrStringPair.length; i++) {
+                chosenTickets.push(arrStringPair[i].split("_"));
+                sum += 500;
+                choice += `<p>Ряд ${chosenTickets[i][0]}, Место ${chosenTickets[i][1]}<br></p>`;
+            }
+            choice += `<h5>Сумма к оплате:</h5><p> ${sum} р.</p>`;
+            $('#choice').html(choice);
+            console.log(chosenTickets);
+            console.log(choice);
+        })
+    </script>
 
     <script>
         function validate() {
@@ -41,9 +67,11 @@
 
 <div class="container">
     <div class="row pt-3">
-        <h3>
-            Вы выбрали ряд 1 место 1, Сумма : 500 рублей.
-        </h3>
+        <h4>
+            Оплата билетов
+        </h4>
+        <h4></h4>
+        <h4></h4>
     </div>
     <div class="row">
         <form>
@@ -59,8 +87,11 @@
                 <label for="email">Почта</label>
                 <input type="text" class="form-control" id="email" placeholder="Почта">
             </div>
-            <button type="button" class="btn btn-success" onclick="return validate()">Оплатить</button>
+            <button type="button" class="btn btn-success" onclick="return validate()">Оплатить<br></button>
         </form>
+    </div>
+    <div class="row pt-3">
+        <p id="choice"></p>
     </div>
 </div>
 </body>
