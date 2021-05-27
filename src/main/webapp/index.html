@@ -28,8 +28,7 @@
                 url: 'http://localhost:8080//job4j_cinema/hall',
                 dataType: "json",
                 success: function (respData) {
-                    // console.log("Вошли в функцию саксеса");
-                     console.log(respData);
+                    console.log(respData);
                     let tickets = "";
                     let countCell = 0;
                     let curSession = respData[0]['session_id'];
@@ -40,13 +39,13 @@
                         let curAccountId = respData[i]['accountId'];
                         if (countCell === 0) {
                             tickets += " <tr>\n"
-                                        + "<th>" + curRow + "</th>";
+                                + "<th>" + curRow + "</th>";
                         }
-                        // if (curAccountId === 2000) {
+                        if (curAccountId === 2000) {
                             tickets += `<td><input type="checkbox" name="place" value=${curValue}> Ряд ${curRow}, Место ${curCell}</td>\n`;
-                        // } else {
-                        //     tickets += `<td><input type="checkbox" name="place" value=${curValue} checked disabled> Ряд ${curRow}, Место ${curCell}</td>\n`;
-                        // }
+                        } else {
+                            tickets += `<td><input type="checkbox" name="place" value=${curValue} disabled> Ряд ${curRow}, Место ${curCell}</td>\n`;
+                        }
 
                         if (countCell === 2) {
                             tickets += "</tr>\n";
@@ -55,7 +54,6 @@
                             countCell++;
                         }
                     }
-                     // console.log(tickets);
                     $('#tbodyId').html(tickets);
                 },
                 error: function (err) {
@@ -69,7 +67,7 @@
 
             let result = true;
             let checked = [];
-            $('input:checkbox:checked').each(function() {
+            $('input:checkbox:checked').each(function () {
                 checked.push($(this).val());
             });
             if (checked.length === 0) {
@@ -87,45 +85,28 @@
 </head>
 
 <body>
-    <div class="container">
-        <div class="row pt-3">
-            <h4>
-                Бронирование мест на сеанс
-            </h4>
-            <table class="table table-bordered">
-                <thead>
-                <tr>
-                    <th style="width: 120px;">Ряд / Место</th>
-                    <th>1</th>
-                    <th>2</th>
-                    <th>3</th>
-                </tr>
-                </thead>
-                <tbody id="tbodyId">
-    <!--                <tr>-->
-    <!--                    <th>1</th>-->
-    <!--                    <td><input type="radio" name="place" value="11"> Ряд 1, Место 1</td>-->
-    <!--                    <td><input type="radio" name="place" value="11"> Ряд 1, Место 1</td>-->
-    <!--                    <td><input type="radio" name="place" value="11"> Ряд 1, Место 1</td>-->
-    <!--                </tr>-->
-    <!--                <tr>-->
-    <!--                    <th>2</th>-->
-    <!--                    <td><input type="radio" name="place" value="11"> Ряд 2, Место 1</td>-->
-    <!--                    <td><input type="radio" name="place" value="11"> Ряд 2, Место 1</td>-->
-    <!--                    <td><input type="radio" name="place" value="11"> Ряд 2, Место 1</td>-->
-    <!--                </tr>-->
-    <!--                <tr>-->
-    <!--                    <th>3</th>-->
-    <!--                    <td><input type="radio" name="place" value="11"> Ряд 3, Место 1</td>-->
-    <!--                    <td><input type="radio" name="place" value="11"> Ряд 3, Место 1</td>-->
-    <!--                    <td><input type="radio" name="place" value="11"> Ряд 3, Место 1</td>-->
-    <!--                </tr>-->
-                </tbody>
-            </table>
-        </div>
-        <div class="row float-right">
-            <button type="button" class="btn btn-success" onclick="return byTickets()">Оплатить</button>
-        </div>
+<div class="container">
+    <div class="row pt-3">
+        <h4>
+            Бронирование мест на сеанс
+        </h4>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th style="width: 120px;">Ряд / Место</th>
+                <th>1</th>
+                <th>2</th>
+                <th>3</th>
+            </tr>
+            </thead>
+            <tbody id="tbodyId">
+
+            </tbody>
+        </table>
     </div>
+    <div class="row float-right">
+        <button type="button" class="btn btn-success" onclick="return byTickets()">Оплатить</button>
+    </div>
+</div>
 </body>
 </html>

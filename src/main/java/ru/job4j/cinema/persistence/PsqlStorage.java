@@ -73,7 +73,7 @@ public class PsqlStorage implements Storage {
         return account;
     }
 
-    public Account updateAccount(Account account) throws SQLIntegrityConstraintViolationException, SQLException {
+    public Account updateAccount(Account account) throws SQLException {
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement("UPDATE candidate SET username =  ? WHERE id = ?")
         ) {
@@ -84,15 +84,12 @@ public class PsqlStorage implements Storage {
     }
 
     private void updateTicketsHolder(Connection connection, Account account)
-            throws SQLIntegrityConstraintViolationException, SQLException {
+            throws SQLException {
         try (PreparedStatement ps = connection.prepareStatement(
-                "UPDATE ticket SET account_id =  ? WHERE session_id = 1"
-                        + "AND row = ?"
-                        + "AND cell = ?"
-        )
-//                "INSERT INTO ticket(session_id, row, cell, account_id) VALUES (?, ?, ?, ?)",
-//                PreparedStatement.RETURN_GENERATED_KEYS)
-        ) {
+                "UPDATE ticket SET account_id = ? WHERE session_id = 1"
+                        + " AND row = ?"
+                        + " AND cell = ?"
+        )) {
             for (Ticket ticket : account.getTickets()) {
                 ps.setInt(1, ticket.getAccountId());
                 ps.setInt(2, ticket.getRow());

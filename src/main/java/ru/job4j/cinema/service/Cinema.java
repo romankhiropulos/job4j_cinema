@@ -10,7 +10,6 @@ import ru.job4j.cinema.persistence.Storage;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Collection;
-import java.util.List;
 
 public class Cinema {
 
@@ -32,10 +31,13 @@ public class Cinema {
     public Exception saveAccount(final Account account) {
         Exception answer = null;
         try {
-//            account.setId((int) System.currentTimeMillis());
-//            account.getTickets().forEach(t -> t.setAccountId((int) account.getId()));
             Account retAccount = storage.getAccount(account.getUsername(), account.getEmail(), account.getPhone());
-            retAccount = (retAccount == null) ? storage.saveAccount(account) : storage.updateAccount(account);
+            if (retAccount == null) {
+                storage.saveAccount(account);
+            } else {
+                account.getTickets().forEach(t -> t.setAccountId(retAccount.getId()));
+                storage.updateAccount(account);
+            }
         } catch (SQLIntegrityConstraintViolationException exception) {
             answer = exception;
             LOG.error("Constraint violation exception: " + exception.getMessage(), exception);

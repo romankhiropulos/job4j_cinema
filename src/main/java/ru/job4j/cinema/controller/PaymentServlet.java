@@ -1,10 +1,5 @@
 package ru.job4j.cinema.controller;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
 import ru.job4j.cinema.model.Account;
 import ru.job4j.cinema.model.Ticket;
 import ru.job4j.cinema.service.Cinema;
@@ -14,7 +9,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLClientInfoException;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
@@ -44,25 +38,9 @@ public class PaymentServlet extends HttpServlet {
 
         Exception serviceAns = cinema.saveAccount(newAccount);
         if (serviceAns instanceof SQLIntegrityConstraintViolationException) {
-//            sc.setAttribute("user", newUser);
             resp.sendRedirect(req.getContextPath() + "/payment.html");
         } else if (serviceAns instanceof SQLException) {
             resp.sendRedirect(req.getContextPath() + "/payment.html");
-//            req.setAttribute("error", "Билет уже куплен!");
-//            req.getRequestDispatcher("reg.jsp").forward(req, resp);
         }
-
-//        resp.sendRedirect(req.getContextPath() + "/index.html");
-
-
-//        if (PsqlStore.instOf().findUserByEmail(newUser.getEmail()) != null) {
-//            req.setAttribute("error", "К этому email'у уже привязан пользователь");
-//            req.getRequestDispatcher("reg.jsp").forward(req, resp);
-//        } else {
-//            PsqlStore.instOf().save(newUser);
-//            HttpSession sc = req.getSession();
-//            sc.setAttribute("user", newUser);
-//            resp.sendRedirect(req.getContextPath() + "/index.jsp");
-//        }
     }
 }

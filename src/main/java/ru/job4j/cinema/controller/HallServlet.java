@@ -11,18 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-// 1. Данные на index.html должны загружать через Ajax.
-//
-// 2. Для этого создайте сервлет HallServlet.
-//
-// 3. Если место занято, то нужно это отображать в таблице.
-//
-// 4. Страница должно обновлять периодически через timout.
-//
 public class HallServlet extends HttpServlet {
 
     private final Cinema cinema = Cinema.getInstance();
@@ -38,11 +29,7 @@ public class HallServlet extends HttpServlet {
         Gson gson = builder.create();
 
         List<Ticket> tickets = (List<Ticket>) cinema.getTickets();
-//        tickets.sort(Ticket::compareTo);
-//        Collections.sort(tickets);
-        tickets.sort(Comparator.comparingInt(Ticket::getRow));
-        tickets.sort(Comparator.comparingInt(Ticket::getCell));
-//        Comparator<Ticket> RESUME_COMPARATOR = (o1, o2) -> o1.getRow() < o2.getCell();
+        tickets.sort(Comparator.comparingInt(Ticket::getRow).thenComparing(Ticket::getCell));
         String jsonResponse = gson.toJson(tickets);
         PrintWriter writer = resp.getWriter();
         writer.write(jsonResponse);
