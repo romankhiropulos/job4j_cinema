@@ -15,15 +15,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLClientInfoException;
+import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
-// 5. После того как пользователь выбрал место, нужно перейти на страницу payment.html.
-//    Сделать это можно через JS - window.local.href.
-//
-// На странице нужно указать место и сумму денег.
-//
 public class PaymentServlet extends HttpServlet {
 
     private final Cinema cinema = Cinema.getInstance();
@@ -31,15 +27,13 @@ public class PaymentServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
-
-//        https://stackoverflow.com/questions/18544133/parsing-json-array-into-java-util-list-with-gson
         String strTickets = req.getParameter("tickets");
-        JsonParser jsonParser = new JsonParser();
-        JsonObject data = (JsonObject) jsonParser.parse(strTickets);
-        JsonArray accounts = data.getAsJsonArray("data");
-        List<Ticket> tickets = new Gson().fromJson(
-                accounts.toString(), new TypeToken<ArrayList<Ticket>>() {}.getType()
-        );
+        List<Ticket> tickets = new ArrayList<>();
+        String[] arr = strTickets.split(",");
+        for (String str : arr) {
+            String[] pair = str.split("_");
+            tickets.add(new Ticket(1, Integer.parseInt(pair[0]), Integer.parseInt(pair[1])));
+        }
 
         Account newAccount = new Account(
                 req.getParameter("name"),
@@ -52,13 +46,13 @@ public class PaymentServlet extends HttpServlet {
         if (serviceAns instanceof SQLIntegrityConstraintViolationException) {
 //            sc.setAttribute("user", newUser);
             resp.sendRedirect(req.getContextPath() + "/payment.html");
-        } else {
+        } else if (serviceAns instanceof SQLException) {
             resp.sendRedirect(req.getContextPath() + "/payment.html");
 //            req.setAttribute("error", "Билет уже куплен!");
 //            req.getRequestDispatcher("reg.jsp").forward(req, resp);
         }
 
-        resp.sendRedirect(req.getContextPath() + "/index.html");
+//        resp.sendRedirect(req.getContextPath() + "/index.html");
 
 
 //        if (PsqlStore.instOf().findUserByEmail(newUser.getEmail()) != null) {

@@ -29,7 +29,7 @@
                 dataType: "json",
                 success: function (respData) {
                     // console.log("Вошли в функцию саксеса");
-                    // console.log(respData);
+                     console.log(respData);
                     let tickets = "";
                     let countCell = 0;
                     let curSession = respData[0]['session_id'];
@@ -37,11 +37,17 @@
                         let curRow = respData[i]['row'];
                         let curCell = respData[i]['cell'];
                         let curValue = curRow + "_" + curCell;
+                        let curAccountId = respData[i]['accountId'];
                         if (countCell === 0) {
                             tickets += " <tr>\n"
                                         + "<th>" + curRow + "</th>";
                         }
-                        tickets += `<td><input type="checkbox" name="place" value=${curValue}> Ряд ${curRow}, Место ${curCell}</td>\n`;
+                        // if (curAccountId === 2000) {
+                            tickets += `<td><input type="checkbox" name="place" value=${curValue}> Ряд ${curRow}, Место ${curCell}</td>\n`;
+                        // } else {
+                        //     tickets += `<td><input type="checkbox" name="place" value=${curValue} checked disabled> Ряд ${curRow}, Место ${curCell}</td>\n`;
+                        // }
+
                         if (countCell === 2) {
                             tickets += "</tr>\n";
                             countCell = 0;
@@ -70,17 +76,6 @@
                 result = false;
                 alert("Нужно выбрать места для оформления заказа!")
             } else {
-                console.log(checked);
-                // var chosenTickets = [];
-                // for (let i = 0; i < checked.length; i++) {
-                //     chosenTickets.push(checked[i].split("_"));
-                // }
-                // 5. После того как пользователь выбрал место,
-                //     нужно перейти на страницу payment.html.
-                //     Сделать это можно через JS - window.local.href.
-                //
-                //     На странице нужно указать место и сумму денег.
-                // console.log(chosenTickets);
                 localStorage.setItem('chosenTickets', checked);
                 console.log(localStorage.getItem('chosenTickets'));
                 window.location.href = "http://localhost:8080//job4j_cinema/payment.html";

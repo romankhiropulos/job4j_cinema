@@ -65,9 +65,10 @@ public class PsqlStorage implements Storage {
             try (ResultSet id = ps.getGeneratedKeys()) {
                 if (id.next()) {
                     account.setId(id.getInt(1));
+                    account.getTickets().forEach(t -> t.setAccountId(account.getId()));
                 }
             }
-            insertTickets(cn, account);
+            updateTicketsHolder(cn, account);
         }
         return account;
     }
@@ -76,23 +77,26 @@ public class PsqlStorage implements Storage {
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement("UPDATE candidate SET username =  ? WHERE id = ?")
         ) {
-            insertTickets(cn, account);
+            updateTicketsHolder(cn, account);
         }
 
         return account;
     }
 
-    private void insertTickets(Connection connection, Account account)
+    private void updateTicketsHolder(Connection connection, Account account)
             throws SQLIntegrityConstraintViolationException, SQLException {
         try (PreparedStatement ps = connection.prepareStatement(
-                "INSERT INTO ticket(session_id, row, cell, account_id) VALUES (?, ?, ?, ?)",
-                PreparedStatement.RETURN_GENERATED_KEYS)
+                "UPDATE ticket SET account_id =  ? WHERE session_id = 1"
+                        + "AND row = ?"
+                        + "AND cell = ?"
+        )
+//                "INSERT INTO ticket(session_id, row, cell, account_id) VALUES (?, ?, ?, ?)",
+//                PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             for (Ticket ticket : account.getTickets()) {
-                ps.setInt(1, 1);
+                ps.setInt(1, ticket.getAccountId());
                 ps.setInt(2, ticket.getRow());
                 ps.setInt(3, ticket.getCell());
-                ps.setLong(4, ticket.getAccountId());
                 ps.addBatch();
             }
             ps.executeBatch();
@@ -113,7 +117,7 @@ public class PsqlStorage implements Storage {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     account = new Account(
-                            rs.getLong("id"),
+                            rs.getInt("id"),
                             rs.getString("username"),
                             rs.getString("email"),
                             rs.getString("phone")

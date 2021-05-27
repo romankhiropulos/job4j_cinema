@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 // 1. Данные на index.html должны загружать через Ajax.
@@ -36,6 +38,11 @@ public class HallServlet extends HttpServlet {
         Gson gson = builder.create();
 
         List<Ticket> tickets = (List<Ticket>) cinema.getTickets();
+//        tickets.sort(Ticket::compareTo);
+//        Collections.sort(tickets);
+        tickets.sort(Comparator.comparingInt(Ticket::getRow));
+        tickets.sort(Comparator.comparingInt(Ticket::getCell));
+//        Comparator<Ticket> RESUME_COMPARATOR = (o1, o2) -> o1.getRow() < o2.getCell();
         String jsonResponse = gson.toJson(tickets);
         PrintWriter writer = resp.getWriter();
         writer.write(jsonResponse);

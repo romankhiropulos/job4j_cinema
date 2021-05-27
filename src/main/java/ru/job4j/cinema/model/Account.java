@@ -5,7 +5,7 @@ import java.util.Objects;
 
 public class Account {
 
-    private long id;
+    private int id;
     private String username;
     private String email;
     private String phone;
@@ -17,7 +17,7 @@ public class Account {
         this.phone = phone;
     }
 
-    public Account(long id, String username, String email, String phone) {
+    public Account(int id, String username, String email, String phone) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -29,7 +29,7 @@ public class Account {
         this.tickets = tickets;
     }
 
-    public Account(long id, String username, String email, String phone, List<Ticket> tickets) {
+    public Account(int id, String username, String email, String phone, List<Ticket> tickets) {
         this(id, username, email, phone);
         this.tickets = tickets;
     }
@@ -58,11 +58,11 @@ public class Account {
         this.phone = phone;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

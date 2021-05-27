@@ -32,9 +32,9 @@ public class Cinema {
     public Exception saveAccount(final Account account) {
         Exception answer = null;
         try {
+//            account.setId((int) System.currentTimeMillis());
+//            account.getTickets().forEach(t -> t.setAccountId((int) account.getId()));
             Account retAccount = storage.getAccount(account.getUsername(), account.getEmail(), account.getPhone());
-            account.setId(System.currentTimeMillis());
-            account.getTickets().forEach(t -> t.setAccountId((int) account.getId()));
             retAccount = (retAccount == null) ? storage.saveAccount(account) : storage.updateAccount(account);
         } catch (SQLIntegrityConstraintViolationException exception) {
             answer = exception;

@@ -20,6 +20,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
     <title>Hello, world!</title>
 
@@ -37,7 +38,8 @@
             }
             choice += `<h5>Сумма к оплате:</h5><p> ${sum} р.</p>`;
             $('#choice').html(choice);
-            console.log(chosenTickets);
+            localStorage.setItem('chosenTickets', arrStringPair);
+            console.log(arrStringPair);
             console.log(choice);
         })
     </script>
@@ -58,6 +60,21 @@
                 valid = false;
                 alert("Пожалуйста заполните поле \"Номер\"");
             }
+
+            $.ajax({
+                type: "POST",
+                url: 'http://localhost:8080//job4j_cinema/payment',
+                data: { name: name, email: email, phone: phone, tickets: localStorage.getItem('chosenTickets') },
+                success: function (respData) {
+                    alert("Оплата прошла успешно!");
+                    document.location.replace("http://localhost:8080//job4j_cinema/index.html");
+                },
+                error: function (err) {
+                    alert(err);
+                    console.log(err);
+                    valid = false;
+                }
+            })
 
             return valid;
         }
