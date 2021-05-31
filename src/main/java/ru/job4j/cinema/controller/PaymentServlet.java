@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
@@ -38,7 +39,9 @@ public class PaymentServlet extends HttpServlet {
 
         Exception serviceAns = cinema.saveAccount(newAccount);
         if (serviceAns instanceof SQLIntegrityConstraintViolationException) {
-            resp.sendRedirect(req.getContextPath() + "/payment.html");
+            PrintWriter writer = resp.getWriter();
+            writer.println(serviceAns.getMessage());
+            writer.flush();
         } else if (serviceAns instanceof SQLException) {
             resp.sendRedirect(req.getContextPath() + "/payment.html");
         }

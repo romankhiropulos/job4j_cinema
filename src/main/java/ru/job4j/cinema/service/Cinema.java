@@ -11,7 +11,6 @@ import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 
 public class Cinema {
 
@@ -33,9 +32,10 @@ public class Cinema {
     public Exception saveAccount(final Account account) {
         Exception answer = null;
         try {
-            List<Ticket> holdenTickets = (List<Ticket>) storage.findTicketsByAccountId(account.getId());
-            if (Objects.requireNonNull(holdenTickets).size() != 0) {
-                throw new SQLIntegrityConstraintViolationException("Tickets already sold!");
+            if (!validateChosenTickets(account)) {
+                Exception exception = new SQLIntegrityConstraintViolationException("Tickets are already sold out!");
+                LOG.error("Constraint violation exception: " + exception.getMessage(), exception);
+                return exception;
             }
             Account retAccount = storage.getAccount(account.getUsername(), account.getEmail(), account.getPhone());
             if (retAccount == null) {
@@ -55,6 +55,21 @@ public class Cinema {
         return answer;
     }
 
+    private boolean validateChosenTickets(Account account) throws SQLException {
+        boolean result = true;
+        List<Ticket> heldTickets = (List<Ticket>) storage.getHeldTickets();
+        for (Ticket accountTicket : account.getTickets()) {
+            for (Ticket heldTicket : heldTickets) {
+                if (accountTicket.getRow() == heldTicket.getRow()
+                        && accountTicket.getCell() == heldTicket.getCell()) {
+                    result = false;
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
     public Collection<Ticket> getTickets() {
         Collection<Ticket> tickets = null;
         try {
@@ -65,5 +80,4 @@ public class Cinema {
 
         return tickets;
     }
-
 }

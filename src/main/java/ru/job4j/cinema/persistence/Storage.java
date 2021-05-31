@@ -16,5 +16,5 @@ public interface Storage {
 
     Collection<Ticket> getAllTickets() throws SQLException;
 
-    Collection<Ticket> findTicketsByAccountId(int accountId) throws SQLException;
+    Collection<Ticket> getHeldTickets() throws SQLException;
 }

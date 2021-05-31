@@ -52,7 +52,7 @@ public class PsqlStorage implements Storage {
     }
 
     @Override
-    public Account saveAccount(Account account) throws SQLIntegrityConstraintViolationException, SQLException {
+    public Account saveAccount(Account account) throws SQLException {
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(
                      "INSERT INTO account(username, email, phone) VALUES (?, ?, ?)",
@@ -149,12 +149,12 @@ public class PsqlStorage implements Storage {
     }
 
     @Override
-    public Collection<Ticket> findTicketsByAccountId(int accountId) throws SQLException {
+    public Collection<Ticket> getHeldTickets() throws SQLException {
         List<Ticket> tickets = new ArrayList<>();
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("SELECT * FROM ticket WHERE account_id = ?")
+             PreparedStatement ps = cn.prepareStatement("SELECT * FROM ticket WHERE account_id != ?")
         ) {
-            ps.setInt(1, accountId);
+            ps.setInt(1, 2000);
             try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
                     tickets.add(
