@@ -23,6 +23,12 @@
 
     <script>
         $(document).ready(function () {
+            showTickets();
+            setInterval(showTickets, 40000);
+        })
+    </script>
+    <script>
+        function showTickets() {
             $.ajax({
                 type: "GET",
                 url: 'http://localhost:8080//job4j_cinema/hall',
@@ -60,7 +66,7 @@
                     alert(err);
                 }
             })
-        })
+        }
     </script>
     <script>
         function byTickets() {

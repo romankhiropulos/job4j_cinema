@@ -83,8 +83,7 @@ public class PsqlStorage implements Storage {
         return account;
     }
 
-    private void updateTicketsHolder(Connection connection, Account account)
-            throws SQLException {
+    private void updateTicketsHolder(Connection connection, Account account) throws SQLException {
         try (PreparedStatement ps = connection.prepareStatement(
                 "UPDATE ticket SET account_id = ? WHERE session_id = 1"
                         + " AND row = ?"
@@ -132,6 +131,30 @@ public class PsqlStorage implements Storage {
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement("SELECT * FROM ticket")
         ) {
+            try (ResultSet it = ps.executeQuery()) {
+                while (it.next()) {
+                    tickets.add(
+                            new Ticket(it.getInt("id"),
+                                    it.getInt("session_id"),
+                                    it.getInt("row"),
+                                    it.getInt("cell"),
+                                    it.getInt("account_id")
+                            )
+                    );
+                }
+            }
+        }
+
+        return tickets;
+    }
+
+    @Override
+    public Collection<Ticket> findTicketsByAccountId(int accountId) throws SQLException {
+        List<Ticket> tickets = new ArrayList<>();
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("SELECT * FROM ticket WHERE account_id = ?")
+        ) {
+            ps.setInt(1, accountId);
             try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
                     tickets.add(

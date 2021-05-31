@@ -10,6 +10,8 @@ import ru.job4j.cinema.persistence.Storage;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 
 public class Cinema {
 
@@ -31,6 +33,10 @@ public class Cinema {
     public Exception saveAccount(final Account account) {
         Exception answer = null;
         try {
+            List<Ticket> holdenTickets = (List<Ticket>) storage.findTicketsByAccountId(account.getId());
+            if (Objects.requireNonNull(holdenTickets).size() != 0) {
+                throw new SQLIntegrityConstraintViolationException("Tickets already sold!");
+            }
             Account retAccount = storage.getAccount(account.getUsername(), account.getEmail(), account.getPhone());
             if (retAccount == null) {
                 storage.saveAccount(account);
