@@ -29,13 +29,13 @@ public class Cinema {
         return Cinema.Lazy.INST;
     }
 
-    public Exception saveAccount(final Account account) {
-        Exception answer = null;
+    public void saveAccount(final Account account) throws SQLException {
+        SQLException resultException;
         try {
             if (!validateChosenTickets(account)) {
-                Exception exception = new SQLIntegrityConstraintViolationException("Tickets are already sold out!");
-                LOG.error("Constraint violation exception: " + exception.getMessage(), exception);
-                return exception;
+                resultException = new SQLIntegrityConstraintViolationException("Tickets are already sold out!");
+                LOG.error("Constraint violation exception: " + resultException.getMessage(), resultException);
+                throw resultException;
             }
             Account retAccount = storage.getAccount(account.getUsername(), account.getEmail(), account.getPhone());
             if (retAccount == null) {
@@ -45,14 +45,14 @@ public class Cinema {
                 storage.updateAccount(account);
             }
         } catch (SQLIntegrityConstraintViolationException exception) {
-            answer = exception;
+            resultException = exception;
             LOG.error("Constraint violation exception: " + exception.getMessage(), exception);
+            throw resultException;
         } catch (SQLException exception) {
-            answer = exception;
+            resultException = exception;
             LOG.error("SQL Exception: " + exception.getMessage(), exception);
+            throw resultException;
         }
-
-        return answer;
     }
 
     private boolean validateChosenTickets(Account account) throws SQLException {

@@ -37,12 +37,13 @@ public class PaymentServlet extends HttpServlet {
                 tickets
         );
 
-        Exception serviceAns = cinema.saveAccount(newAccount);
-        if (serviceAns instanceof SQLIntegrityConstraintViolationException) {
+        try {
+            cinema.saveAccount(newAccount);
+        } catch(SQLIntegrityConstraintViolationException exception) {
             PrintWriter writer = resp.getWriter();
-            writer.println(serviceAns.getMessage());
+            writer.println(exception.getMessage());
             writer.flush();
-        } else if (serviceAns instanceof SQLException) {
+        } catch(SQLException exception) {
             resp.sendRedirect(req.getContextPath() + "/payment.html");
         }
     }
