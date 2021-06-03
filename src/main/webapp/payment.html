@@ -66,7 +66,7 @@
                 url: 'http://localhost:8080//job4j_cinema/payment',
                 data: { name: name, email: email, phone: phone, tickets: localStorage.getItem('chosenTickets') },
                 success: function (respData) {
-                    alert(respData);
+                    alert("Success!");
                     document.location.replace("http://localhost:8080//job4j_cinema/index.html");
                 },
                 error: function (err) {

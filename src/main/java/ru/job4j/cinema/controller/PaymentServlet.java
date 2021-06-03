@@ -29,7 +29,6 @@ public class PaymentServlet extends HttpServlet {
             String[] pair = str.split("_");
             tickets.add(new Ticket(1, Integer.parseInt(pair[0]), Integer.parseInt(pair[1])));
         }
-
         Account newAccount = new Account(
                 req.getParameter("name"),
                 req.getParameter("email"),
@@ -41,10 +40,12 @@ public class PaymentServlet extends HttpServlet {
             cinema.saveAccount(newAccount);
         } catch(SQLIntegrityConstraintViolationException exception) {
             PrintWriter writer = resp.getWriter();
-            writer.println(exception.getMessage());
+            writer.println("Sorry, the selected tickets have already been purchased!");
             writer.flush();
         } catch(SQLException exception) {
-            resp.sendRedirect(req.getContextPath() + "/payment.html");
+            PrintWriter writer = resp.getWriter();
+            writer.println("A user is already registered to this number / email!");
+            writer.flush();
         }
     }
 }
